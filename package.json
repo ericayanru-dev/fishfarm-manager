@@ -1,0 +1,24 @@
+{
+  "name": "fishfarm-manager",
+  "version": "1.0.0",
+  "description": "fishfarm-manager is a frontend fish farm management system built with HTML, CSS, Vanilla JavaScript, and a minimal Node.js server. It mirrors a Python-based system to manage fish stock, feed purchases, feed usage, sales, reports, and profit calculations, with persistent storage via LocalStorage and a phased feature roadmap.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericayanru-dev/fishfarm-manager.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ericayanru-dev/fishfarm-manager/issues"
+  },
+  "homepage": "https://github.com/ericayanru-dev/fishfarm-manager#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
