@@ -1,7 +1,9 @@
 export const state = {
+    currentPage: "dashboard",
     dashboard: [],
     fishStock: [],
     feedStock: [],
     feedUsage: [],
-    sale:[]
+    sales: [],
+    reports: []
 }

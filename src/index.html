@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script defer src="scripts/main.js"></script>
+    <link rel="stylesheet" href="styles/mobile.css">
+    <link rel="stylesheet" href="styles/desktop.css">
+    <script type="module"  src="scripts/main.js"></script>
 </head>
 <body>
     <header>
         <section>
             <span>fish farm managment</span>
-            <nav>
-               <button date-page="dashboard">Dashboard</button> 
+            <nav id="sidebar" class="sidebar">
+               <button data-page="dashboard">Dashboard</button> 
                <button data-page="fish">Fish Stock</button>
                <button data-page="feed">Feed Stock</button>
                <button data-page="usage">Feed Usage</button>
@@ -26,8 +28,8 @@
 
     </main>
     
-    <footer>
-
-    </footer>
+     <footer>
+    <small>© Fish Farm Management</small>
+  </footer>
 </body>
 </html>

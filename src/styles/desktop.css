@@ -1,0 +1,17 @@
+@media (min-width: 768px) {
+    .form-group {
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .form-group label {
+        width: 15rem;
+    }
+
+    .dashboard-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    
+}

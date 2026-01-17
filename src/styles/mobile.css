@@ -1,0 +1,26 @@
+main {
+    padding: 1rem;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
