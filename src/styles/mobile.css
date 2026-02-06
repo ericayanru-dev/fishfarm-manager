@@ -1,26 +1,35 @@
-main {
-    padding: 1rem;
-}
+@media (max-width: 760px) {
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 10;;
+        opacity: 0;
+        pointer-events: none;
+        background: rgba(0, 0, 0, 0.6);
+        transition: 0.4s ease;
+    }
 
-.sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
+    body:has(header:not(.collapsed))::before {
+        opacity: 1;
+        pointer-events: auto;
+    }
 
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
+    .site-nav {
+        display: block;
+    }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
+    header {
+        position: fixed;
+        left: 0;
+        width: 270px;
+        height: 100%;
+        z-index: 20;
+        transition: left 0.4s ease ;
+    }
 
-.dashboard-cards {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
+    .collapsed {
+        left: -270px;
+        width: 270px;
+    }
 }

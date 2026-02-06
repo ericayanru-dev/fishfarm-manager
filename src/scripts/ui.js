@@ -18,10 +18,10 @@ export function render(main) {
             <li>${state.feedUsage.total}</li>
             <li>${state.reports.profit}</li>
             </ul>
-            <img src="pic_trulli.jpg" alt="Italian Trulli">
-            <div>
-            <h1>Recent Sales</h1>
+            <img class="dashboard-img" src="images/text.jpg" alt="Italian Trulli">
+            <div class="tables">
             <table class="data-table" id="sales-table">
+            <caption>Recent Sales</caption>
             <thead>
                 <tr>
                 <th>Date</th>
@@ -42,46 +42,46 @@ export function render(main) {
         case "fish":
             main.innerHTML = `
             <h1>Fish Stock</h1>
-            <div>
+            <div class="dashboard-lay">
             <form id="fish-stock">
                 <h2>Add Fish Purchase</h2>
                 <div class="form-group">
-                    <label for="fish-date">Purchase Date</label>
+                    <label for="stock-date">Purchase Date</label>
                     <input 
                     type="date" 
-                    id="feed-date" 
-                    name="feedDate" 
+                    id="stock-date" 
+                    name="stockDate" 
                     required
                     />
                 </div>
                 <div class="form-group">
-                    <label for="fish-quantity">Quantity </label>
+                    <label for="stock-quantity">Quantity </label>
                     <input 
                     type="number" 
-                    id="fish-quantity" 
-                    name="fishQuantity"
+                    id="stock-quantity" 
+                    name="stockQuantity"
                     min="0"
                     step="1"
                     required
                     />
                 </div>
                 <div class="form-group">
-                    <label for="fish-averagesize">Average Size (kg)</label>
+                    <label for="stock-averagesize">Average Size (kg)</label>
                     <input 
                     type="number" 
-                    id="fish-averagesize" 
-                    name="fishAverageSize"
+                    id="stock-averagesize" 
+                    name="stockAverageSize"
                     min="0"
                     step="0.1"
                     required
                     />
                 </div>
                 <div class="form-group">
-                    <label for="fish-cost">Total Cost</label>
+                    <label for="stock-cost">Total Cost</label>
                     <input 
                     type="number" 
-                    id="fish-cost" 
-                    name="fishCost"
+                    id="stock-cost" 
+                    name="stockCost"
                     min="0"
                     step="0.1"
                     required
@@ -89,9 +89,11 @@ export function render(main) {
                 </div>
                 <input type="submit" value="add">
             </form>
-            <img src="pic_trulli.jpg" alt="Italian Trulli">
+            <img class="dashboard-img" src="images/text.jpg" alt="Italian Trulli">
             </div>
+            <div class="tables">
             <table class="data-table" id="fish-stock-table">
+            <caption>fish-stock</caption>
             <thead>
                 <tr>
                 <th>Date</th>
@@ -104,13 +106,14 @@ export function render(main) {
             <tbody>
                 <!-- Rows injected by JS -->
             </tbody>
-            </table>`;
+            </table>
+            </div>`;
             break;
 
         case "feed":
             main.innerHTML = `
             <h1>Feed Stock</h1>
-            <div>
+            <div class="dashboard-lay">
             <form id="feed-form">
                 <h2>Add Feed Purchase</h2>
                 <div class="form-group">
@@ -160,9 +163,11 @@ export function render(main) {
 
                 <input type="submit" value="add">
             </form>
-            <img src="pic_trulli.jpg" alt="Italian Trulli">
+            <img class="dashboard-img" src="images/text.jpg" alt="Italian Trulli">
             </div>
+            <div class="tables">
             <table class="data-table" id="feed-stock-table">
+            <caption>feed-stock</caption>
             <thead>
                 <tr>
                 <th>Date</th>
@@ -175,12 +180,14 @@ export function render(main) {
             <tbody>
                 <!-- Rows injected by JS -->
             </tbody>
-            </table>`;
+            </table>
+            </div>`;
             break;
 
         case "usage":
             main.innerHTML = `
             <h1>Feed Usage</h1>
+            <div class="dashboard-lay">
             <form id="usage-form">
                 <h2>Add Feed Usage</h2>
                 <div class="form-group">
@@ -231,9 +238,11 @@ export function render(main) {
 
                 <input type="submit" value="add">
             </form>
-            <img src="pic_trulli.jpg" alt="Italian Trulli">
+            <img class="dashboard-img" src="images/text.jpg" alt="Italian Trulli">
             </div>
+            <div class="tables">
             <table class="data-table" id="feed-usage-table">
+            <caption>Feed Usage</caption>
             <thead>
                 <tr>
                 <th>Date</th>
@@ -246,13 +255,14 @@ export function render(main) {
             <tbody>
                 <!-- Rows injected by JS -->
             </tbody>
-            </table>`;
+            </table>
+            </div>`;
             break;
 
         case "sales":
             main.innerHTML = `
             <h1>Sales</h1>
-            <div>
+            <div class="dashboard-lay">
             <form id="sales-form">
                 <h2>Add Sale</h2>
                 <div class="form-group">
@@ -301,9 +311,11 @@ export function render(main) {
 
                 <input type="submit" value="add">
             </form>
-            <img src="pic_trulli.jpg" alt="Italian Trulli">
+            <img class="dashboard-img" src="images/text.jpg" alt="Italian Trulli">
             </div>
+            <div class="tables">
             <table class="data-table" id="sales-table">
+            <caption>Sales</caption>
             <thead>
                 <tr>
                 <th>Date</th>
@@ -316,7 +328,8 @@ export function render(main) {
             <tbody>
                 <!-- Rows injected by JS -->
             </tbody>
-            </table>`;
+            </table>
+            </div>`;
             break;
 
         case "reports":
@@ -341,15 +354,15 @@ export function render(main) {
                     <label for="end-date">End Date</label>
                     <input 
                     type="date" 
-                    id="start-date" 
-                    name="startDate" 
+                    id="end-date" 
+                    name="endDate" 
                     required
                     />
                 </div>
-                <input type="submit" value="Apply"
+                <input type="submit" value="Apply">
             </form>
-            <div id="reports-content">
-            <div class="report-table">
+            <div class="report-content">
+            <div class="tables" >
             <table class="data-table" id="feed-stock-table">
             <caption> Feed Report</caption>
             <thead>
@@ -364,7 +377,11 @@ export function render(main) {
             <tbody>
                 <!-- Rows injected by JS -->
             </tbody>
-            <th>Total price</th>
+            <tfoot>
+            <tr>
+            <th colspan="4">Total price</th>
+            <th id="feed-total"></th>
+            </tr>
             </table>
 
             <table class="data-table" id="sales-table">
@@ -381,16 +398,27 @@ export function render(main) {
             <tbody>
                 <!-- Rows injected by JS -->
             </tbody>
-            <th>Total Revenue</th>
+            <tfoot>
+            <tr>
+            <th colspan="4">Total Revenue</th>
+            <th id="revenue-total"></th>
+            </tfoot>
             </table>
             </div>
             <table class="report-table" id="report-table">
-            <thead>
             <caption>Total Summary</caption>
-                <tr>Total Income</tr>
-                <tr>Total Expenses</tr>
-                <tr>Profit</tr>
+            <thead>
+                <tr>
+                <th>Total Income</th>
+                </tr>
+                <tr>
+                <th>Total Expenses</th>
+                </tr>
+                <tr>
+                <th>Profit</th>
+                </tr>
             </thead>
+            </table>
             </div>`;
             break;
 

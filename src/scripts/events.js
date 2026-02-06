@@ -4,9 +4,10 @@ import { render } from "./ui.js";
 
 export function renderSidebar(sidebar, main) {
     sidebar.addEventListener("click", (e) => {
-        if (!e.target.dataset.page) return;
+        const button = e.target.closest("button[data-page]");
+        if (!button) return;
 
-        state.currentPage = e.target.dataset.page;
+        state.currentPage = button.dataset.page;
         render(main)
     })
 }
