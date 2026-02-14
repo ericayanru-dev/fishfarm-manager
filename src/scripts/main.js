@@ -1,9 +1,9 @@
-import { state } from "./state.js";
-import { render } from "./ui.js";
-import { renderSidebar } from "./events.js";
+import { render, applyTheme, applySidebarState } from "./ui.js";
+import { renderSidebar, renderTheme, initSidebar, submitForm } from "./events.js";
+import { loadState } from "./storage.js";
 
 const sidebar = document.querySelector("#sidebar");
-const sidebarToggle = document.querySelectorAll(".sidebar-toggle");
+const sidebarToggles = document.querySelectorAll(".sidebar-toggle");
 const header = document.querySelector("header")
 const main = document.querySelector("#main");
 const body = document.querySelector("body");
@@ -12,46 +12,25 @@ const themeIcon = document.querySelector("#themeIcon");
 const searchForm = document.querySelector("#searchForm");
 
 
-
+loadState()
 render(main);
-renderSidebar(sidebar, main);
-
+applyTheme(themeIcon)
 if (window.innerWidth <= 760) {
     document.querySelector("header").classList.add("collapsed");
 }
+applySidebarState(header);
 
-// update the theme icon base on current theme and sidebar state
-const updateThemeIcon = () => {
-    const isDark = document.body.classList.contains("dark-theme");
-    themeIcon.textContent = isDark ? "light_mode" : "dark_mode";
-}
-
-// Apply dark theme if saved
-const savedTheme = localStorage.getItem("theme");
-if (savedTheme === "dark") {
-  document.body.classList.add("dark-theme");
-}
-
-updateThemeIcon();
-
-// Toggle sidebar collapsed 
-sidebarToggle.forEach(btn => {
-    btn.addEventListener("click", () => {
-        header.classList.toggle("collapsed");
-    })
-})
-
-
+renderSidebar(sidebar, main);
+initSidebar(sidebarToggles, header);
 // Toggle dark mode
-themeToggle.addEventListener("click", () => {
-    const isDark = document.body.classList.toggle("dark-theme")
-    localStorage.setItem("theme", isDark ? "dark" : "light");
-    updateThemeIcon()
-})
+renderTheme(themeToggle, themeIcon)
+
+// validate and submit form
+submitForm()
 
 // Expand sidebar when search form is clicked
 searchForm.addEventListener("click", () => {
-    if (header.classList.contains("collapsed")){
+    if (header.classList.contains("collapsed")) {
         header.classList.remove("collapsed");
         searchForm.querySelector("input").focus();
     }

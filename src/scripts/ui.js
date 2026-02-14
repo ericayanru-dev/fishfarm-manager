@@ -1,7 +1,15 @@
 import { state } from "./state.js";
+import { loadState } from "./storage.js";
+import { totalFeedUsed, totalRevenue, totalFishStock } from "./funky.js";
+
+loadState()
 
 export function render(main) {
-    switch (state.currentPage) {
+
+    const fishTotal = totalFishStock();
+    const feedTotal = totalFeedUsed(state);
+
+    switch (state.ui.currentPage) {
         case "dashboard":
             // The totals should be populated by totalAll which should contain the currentCircleTotal and
             // addToCircle if user want to include more update to the current circle but if the user
@@ -14,9 +22,9 @@ export function render(main) {
             <h1>Dashboard</h1>
             <div class="dashboard-cards">
             <ul class="dashboard-list">
-            <li>${state.fishStock.total}</li>
-            <li>${state.feedUsage.total}</li>
-            <li>${state.reports.profit}</li>
+            <li>Total Fish Stocked: ${fishTotal}</li>
+            <li>Total Feed Used: ${feedTotal} kg</li>
+            <li>Total Sales: ₦${state.sales.totalRevenue}</li>
             </ul>
             <img class="dashboard-img" src="images/text.jpg" alt="Italian Trulli">
             <div class="tables">
@@ -43,7 +51,7 @@ export function render(main) {
             main.innerHTML = `
             <h1>Fish Stock</h1>
             <div class="dashboard-lay">
-            <form id="fish-stock">
+            <form id="fish-form">
                 <h2>Add Fish Purchase</h2>
                 <div class="form-group">
                     <label for="stock-date">Purchase Date</label>
@@ -53,17 +61,28 @@ export function render(main) {
                     name="stockDate" 
                     required
                     />
+                    <span class="error"></span>
                 </div>
                 <div class="form-group">
+                    <label for="supplier">Supplier</label>
+                    <input
+                    type = text
+                    id="stock-supplier"
+                    name="stockSupplier"
+                    required>
+                    <span class="error"></span>
+                </div>
+                 <div class="form-group">
                     <label for="stock-quantity">Quantity </label>
                     <input 
                     type="number" 
                     id="stock-quantity" 
                     name="stockQuantity"
-                    min="0"
+                    min="1"
                     step="1"
                     required
                     />
+                    <span class="error"></span>
                 </div>
                 <div class="form-group">
                     <label for="stock-averagesize">Average Size (kg)</label>
@@ -71,10 +90,11 @@ export function render(main) {
                     type="number" 
                     id="stock-averagesize" 
                     name="stockAverageSize"
-                    min="0"
+                    min="0.1"
                     step="0.1"
                     required
                     />
+                    <span class="error"></span>
                 </div>
                 <div class="form-group">
                     <label for="stock-cost">Total Cost</label>
@@ -82,10 +102,19 @@ export function render(main) {
                     type="number" 
                     id="stock-cost" 
                     name="stockCost"
-                    min="0"
+                    min="1"
                     step="0.1"
                     required
                     />
+                    <span class="error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="note">Note</label>
+                    <textarea
+                    id="stock-note"
+                    name="stockNote">
+                    </textarea>
+                    <span class="error"></span>
                 </div>
                 <input type="submit" value="add">
             </form>
@@ -124,6 +153,17 @@ export function render(main) {
                     name="feedDate" 
                     required
                     />
+                    <span class="error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="supplier">Supplier</label>
+                    <input
+                    type = text
+                    id="feed-supplier"
+                    name="feedSupplier"
+                    required>
+                    <span class="error"></span>
                 </div>
 
                 <div class="form-group">
@@ -135,6 +175,7 @@ export function render(main) {
                     placeholder="e.g. Floating Pellet"
                     required
                     />
+                    <span class="error"></span>
                 </div>
 
                 <div class="form-group">
@@ -147,6 +188,7 @@ export function render(main) {
                     step="0.01"
                     required
                     />
+                    <span class="error"></span>
                 </div>
 
                 <div class="form-group">
@@ -159,6 +201,15 @@ export function render(main) {
                     step="0.01"
                     required
                     />
+                    <span class="error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="note">Note</label>
+                    <textarea
+                    id="feed-note"
+                    name="feedNote">
+                    </textarea>
+                    <span class="error"></span>
                 </div>
 
                 <input type="submit" value="add">
@@ -198,6 +249,17 @@ export function render(main) {
                     name="usageDate" 
                     required
                     />
+                    <span class="error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="pond">Pond</label>
+                    <input
+                    type = text
+                    id="pond"
+                    name="pond"
+                    required>
+                    <span class="error"></span>
                 </div>
 
                 <div class="form-group">
@@ -209,6 +271,7 @@ export function render(main) {
                     placeholder="e.g. Floating Pellet"
                     required
                     />
+                    <span class="error"></span>
                 </div>
 
                 <div class="form-group">
@@ -221,6 +284,7 @@ export function render(main) {
                     step="0.01"
                     required
                     />
+                    <span class="error"></span>
                 </div>
                 <!-- cost should be calculated automaticaly with the privoius
                 feed stock price and the usage quantity -->
@@ -234,6 +298,16 @@ export function render(main) {
                     step="0.01"
                     required
                     />
+                    <span class="error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="note">Note</label>
+                    <textarea
+                    id="usage-note"
+                    name="usageNote">
+                    </textarea>
+                    <span class="error"></span>
                 </div>
 
                 <input type="submit" value="add">
@@ -273,6 +347,17 @@ export function render(main) {
                     name="saleDate" 
                     required
                     />
+                    <span class="error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="buyer">Buyer</label>
+                    <input
+                    type = text
+                    id="buyer"
+                    name="buyer"
+                    required>
+                    <span class="error"></span>
                 </div>
 
                 <div class="form-group">
@@ -285,6 +370,7 @@ export function render(main) {
                     step="0.01"
                     required
                     />
+                    <span class="error"></span>
                 </div>
 
                 <div class="form-group">
@@ -297,16 +383,27 @@ export function render(main) {
                     step="0.01"
                     required
                     />
+                    <span class="error"></span>
                 </div>
 
                 <div class="form-group">
-                    <label for="sale-price">Unit price</label>
+                    <label for="sale-price">Total cost</label>
                     <input 
                     type="number" 
                     id="sale-price" 
                     name="salePrice" 
                     required
                     />
+                    <span class="error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="note">Note</label>
+                    <textarea
+                    id="sale-note"
+                    name="saleNote">
+                    </textarea>
+                    <span class="error"></span>
                 </div>
 
                 <input type="submit" value="add">
@@ -349,6 +446,7 @@ export function render(main) {
                     name="startDate" 
                     required
                     />
+                    <span class="error"></span>
                 </div>
                 <div class="form-group">
                     <label for="end-date">End Date</label>
@@ -358,6 +456,7 @@ export function render(main) {
                     name="endDate" 
                     required
                     />
+                    <span class="error"></span>
                 </div>
                 <input type="submit" value="Apply">
             </form>
@@ -423,4 +522,21 @@ export function render(main) {
             break;
 
     }
+}
+
+
+export function applyTheme(themeIcon) {
+  const isDark = state.ui.theme === "dark";
+
+  document.body.classList.toggle("dark-theme", isDark);
+
+  if (themeIcon) {
+    themeIcon.textContent = isDark ? "light_mode" : "dark_mode";
+  }
+}
+
+export function applySidebarState(header) {
+  header.classList.toggle("collapsed",
+  state.ui.sidebarCollapsed === true
+  );
 }
