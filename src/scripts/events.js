@@ -1,8 +1,8 @@
 import { state } from "./state.js";
 import { render, applyTheme, applySidebarState} from "./ui.js";
-import { toggleTheme, toggleSidebarState, addFishStock, addFeedStock, addFeedUsage, addSale} from "./mutationsState.js";
+import { toggleTheme, toggleSidebarState, addFishStock, addFeedStock, addFeedUsage, addSale, addMortality} from "./mutationsState.js";
 import { saveState } from "./storage.js";
-import { renderFormErrors, hasEnoughFeed, showBusinessError } from "./funky.js"
+import { renderFormErrors, hasEnoughFeed, showBusinessError, totalFishStock, getFeedUnitPrice } from "./funky.js"
 
 const main = document.querySelector("#main");
 
@@ -64,7 +64,7 @@ export function submitForm() {
 
   //Route by form ID
   switch (form.id) {
-    case "fish-form":
+    case "fish-form":    
       addFishStock({
         date: form.stockDate.value,
         quantity: Number(form.stockQuantity.value),
@@ -76,11 +76,33 @@ export function submitForm() {
       render(main);
       form.reset();
       break;
+    
+    case "mortality-form": {
+      const qty = Number(form.mortalityQuantity.value);
+
+      if (qty > totalFishStock()) {
+        showBusinessError(form, "Mortality exceeds available fish stock");
+        return;
+      }
+
+      addMortality({
+        date: form.mortalityDate.value,
+        pond: form.mortalityPond.value,
+        quantity: qty,
+        reason: form.mortalityReason.value
+      });
+
+      render(main);
+      form.reset();
+      break;
+    }
+
 
     case "feed-form":
       addFeedStock({
         date: form.feedDate.value,
         feedType: form.feedType.value,
+        feedSize: Number(form.feedSize.value),
         quantity: Number(form.feedQuantity.value),
         cost: Number(form.feedCost.value),
       });
@@ -91,18 +113,23 @@ export function submitForm() {
       break;
 
     case "usage-form":
-      const qty = Number(form.usageQuantity.value);
+      const size = Number(form.usageSize.value);
       const type = form.usageType.value;
+      const qyt = Number(form.usageQuantity.value)
+      const totalCost = getFeedUnitPrice(type, size, qyt)
 
-      if (!hasEnoughFeed(type, qty)) {
+      if ( qyt > hasEnoughFeed(type, size)) {
         showBusinessError(form, "Not enough feed in stock");
         return;
       }
+      getFeedUnitPrice(type, size, qyt)
 
       addFeedUsage({
         date: form.usageDate.value,
         type,
-        quantity: qty,
+        usageSize: Number(form.usageSize.value),
+        quantity: Number(form.usageQuantity.value),
+        cost: totalCost
       });
 
       saveState();
@@ -111,6 +138,12 @@ export function submitForm() {
       break;
 
     case "sales-form":
+      const quantity = Number(form.saleQuantity.value);
+      if (quantity > totalFishStock()) {
+        showBusinessError(form, "Not enough fish in stock");
+        return;
+      }
+      
       addSale({
         date: form.saleDate.value,
         quantity: Number(form.saleQuantity.value),

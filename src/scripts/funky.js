@@ -45,16 +45,16 @@ export function renderFormErrors(form) {
 
 
 
-export function hasEnoughFeed(type, qty) {
-  const total = state.feedStock.data
-    .filter(f => f.feedType === type)
-    .reduce((sum, f) => sum + f.quantity, 0);
+export function hasEnoughFeed(feedType, feedSize) {
+  const stocked = state.feedStock.data
+    .filter(f => f.feedType === feedType && f.feedSize === feedSize)
+    .reduce((sum, f) => sum + Number(f.quantity), 0);
 
   const used = state.feedUsage.data
-    .filter(u => u.type === type)
-    .reduce((sum, u) => sum + u.quantity, 0);
+    .filter(u => u.feedType === feedType && u.feedSize === feedSize)
+    .reduce((sum, u) => sum + Number(u.quantity), 0);
 
-  return total - used >= qty;
+  return stocked - used;
 }
 
 export function showBusinessError(form, message) {
@@ -67,16 +67,24 @@ export function showBusinessError(form, message) {
   box.textContent = message;
 }
 
-
 export function totalFishStock() {
-  
-  const total = state.fishStock.data
-    .reduce((sum, f) => sum + f.quantity, 0);
 
-  const used = state.sales.data
-    .reduce((sum, u) => sum + u.quantity, 0);
+  const stocked = state.fishStock.data.reduce(
+    (sum, f) => sum + Number(f.quantity),
+    0
+  );
 
-  return total - used;
+  const sold = state.sales.data.reduce(
+    (sum, s) => sum + Number(s.quantity),
+    0
+  );
+
+  const mortality = state.mortality.data.reduce(
+    (sum, m) => sum + Number(m.quantity),
+    0
+  );
+
+  return stocked - sold - mortality;
 }
 
 export const totalFishStockCost = (state) =>
@@ -91,14 +99,73 @@ export const totalFeedUsed = (state) =>
     0
   );
 
-  export const totalFeedCost = (state) =>
+export const totalFeedCost = (state) =>
   state.feedUsage.data.reduce(
     (sum, record) => sum + Number(record.cost),
     0
   );
 
-  export const totalRevenue = (state) =>
+export const totalRevenue = (state) =>
   state.sales.data.reduce(
-    (sum, sale) => sum + Number(sale.amount),
+    (sum, sale) => sum + Number(sale.cost),
     0
   );
+
+
+export function getFeedUnitPrice(feedType, feedSize, quantity) {
+  const relevantStock = state.feedStock.data.filter(
+    f => f.feedType === feedType && f.feedSize === feedSize
+  );
+
+  const totalKg = relevantStock.reduce(
+    (sum, f) => sum + Number(f.quantity),
+    0
+  );
+
+  const totalCost = relevantStock.reduce(
+    (sum, f) => sum + Number(f.cost),
+    0
+  );
+
+  if (totalKg === 0) return 0;
+
+  const unitPrice = totalCost / totalKg;
+  return unitPrice * Number(quantity);
+}
+
+
+
+export function initFeedUsagePreview() {
+  const form = document.querySelector("#usage-form");
+  if (!form) return;
+
+  const typeInput = form.querySelector("#usage-type");
+  const sizeInput = form.querySelector("#usage-size");
+  const qtyInput = form.querySelector("#usage-quantity");
+
+  const previewEl = form.querySelector("#usage-cost");
+  const hiddenCostInput = form.querySelector("#feed-cost");
+
+  [typeInput, sizeInput, qtyInput].forEach(input => {
+    input.addEventListener("input", handlePreview);
+  });
+
+  function handlePreview() {
+    const feedType = typeInput.value;
+    const feedSize = Number(sizeInput.value);
+    const quantity = Number(qtyInput.value);
+
+    // Do nothing until all required inputs exist
+    if (!feedType && !feedSize && !quantity) {
+      previewEl.textContent = "₦0.00";
+      hiddenCostInput.value = "";
+      return;
+    }
+
+    const cost = getFeedUnitPrice(feedType, feedSize, quantity);
+
+    previewEl.textContent = `₦${cost.toFixed(2)}`;
+    hiddenCostInput.value = cost;
+  }
+}
+

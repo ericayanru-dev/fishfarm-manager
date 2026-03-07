@@ -25,6 +25,17 @@ initSidebar(sidebarToggles, header);
 // Toggle dark mode
 renderTheme(themeToggle, themeIcon)
 
+document.querySelector(".menu-list").addEventListener("click", (e) => {
+  const parentBtn = e.target.closest(".menu-parent");
+  if (!parentBtn) return;
+
+  const subMenu = parentBtn.nextElementSibling;
+  if (!subMenu || !subMenu.classList.contains("menu-sublist")) return;
+
+  subMenu.style.display =
+    subMenu.style.display === "block" ? "none" : "block";
+});
+
 // validate and submit form
 submitForm()
 

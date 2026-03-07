@@ -29,11 +29,25 @@ export function addFishStock({ date, quantity, averageSize, cost }) {
   saveState();
 }
 
-export function addFeedStock({ date, feedType, quantity, cost }) {
+export function addMortality({ date, pond, quantity, reason }) {
+  state.mortality.data.push({
+    id: crypto.randomUUID(),
+    date,
+    pond,
+    quantity: Number(quantity),
+    reason: reason || ""
+  });
+
+  saveState();
+}
+
+
+export function addFeedStock({ date, feedType,feedSize, quantity, cost }) {
   state.feedStock.data.push({
     id: crypto.randomUUID(),
     date,
     feedType,
+    feedSize,
     quantity: Number(quantity),
     cost: Number(cost),
   });
@@ -43,11 +57,12 @@ export function addFeedStock({ date, feedType, quantity, cost }) {
   saveState();
 }
 
-export function addFeedUsage({ date, type, quantity, cost }) {
+export function addFeedUsage({ date, type, usageSize, quantity, cost }) {
   state.feedUsage.data.push({
     id: crypto.randomUUID(),
     date,
     type,
+    usageSize,
     quantity: Number(quantity),
     cost: Number(cost),
   });

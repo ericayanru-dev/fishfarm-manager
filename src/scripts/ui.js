@@ -1,6 +1,6 @@
 import { state } from "./state.js";
 import { loadState } from "./storage.js";
-import { totalFeedUsed, totalRevenue, totalFishStock } from "./funky.js";
+import { totalFeedUsed, totalFishStock, totalRevenue, initFeedUsagePreview } from "./funky.js";
 
 loadState()
 
@@ -8,6 +8,7 @@ export function render(main) {
 
     const fishTotal = totalFishStock();
     const feedTotal = totalFeedUsed(state);
+    const Revenue = totalRevenue(state)
 
     switch (state.ui.currentPage) {
         case "dashboard":
@@ -24,7 +25,7 @@ export function render(main) {
             <ul class="dashboard-list">
             <li>Total Fish Stocked: ${fishTotal}</li>
             <li>Total Feed Used: ${feedTotal} kg</li>
-            <li>Total Sales: ₦${state.sales.totalRevenue}</li>
+            <li>Total Sales: ₦${Revenue}</li>
             </ul>
             <img class="dashboard-img" src="images/text.jpg" alt="Italian Trulli">
             <div class="tables">
@@ -138,6 +139,80 @@ export function render(main) {
             </table>
             </div>`;
             break;
+        
+        case "mortality":
+            main.innerHTML = `
+                <h1>Fish Mortality</h1>
+                <div class="dashboard-lay">
+                <form id="mortality-form">
+                    <h2>Record Fish Mortality</h2>
+
+                    <div class="form-group">
+                    <label for="mortality-date">Date</label>
+                    <input
+                        type="date"
+                        id="mortality-date"
+                        name="mortalityDate"
+                        required
+                    />
+                    <span class="error"></span>
+                    </div>
+
+                    <div class="form-group">
+                    <label for="mortality-pond">Pond / Batch</label>
+                    <input
+                        type="text"
+                        id="mortality-pond"
+                        name="mortalityPond"
+                        required
+                    />
+                    <span class="error"></span>
+                    </div>
+
+                    <div class="form-group">
+                    <label for="mortality-quantity">Quantity Lost</label>
+                    <input
+                        type="number"
+                        id="mortality-quantity"
+                        name="mortalityQuantity"
+                        min="1"
+                        step="1"
+                        required
+                    />
+                    <span class="error"></span>
+                    </div>
+
+                    <div class="form-group">
+                    <label for="mortality-reason">Reason</label>
+                    <textarea
+                        id="mortality-reason"
+                        name="mortalityReason"
+                    ></textarea>
+                    <span class="error"></span>
+                    </div>
+
+                    <input type="submit" value="add">
+                </form>
+
+                <img class="dashboard-img" src="images/text.jpg" alt="Italian Trulli">
+                </div>
+
+                <div class="tables">
+                <table class="data-table" id="mortality-table">
+                    <caption>Mortality Records</caption>
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Pond</th>
+                        <th>Quantity</th>
+                        <th>Reason</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                </div>
+            `;
+            break;
 
         case "feed":
             main.innerHTML = `
@@ -173,6 +248,19 @@ export function render(main) {
                     id="feed-type" 
                     name="feedType" 
                     placeholder="e.g. Floating Pellet"
+                    required
+                    />
+                    <span class="error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="feed-size">Feed Size (mm)</label>
+                    <input 
+                    type="number" 
+                    id="feed-size" 
+                    name="feedSize"
+                    min="0.1"
+                    step="0.1"
                     required
                     />
                     <span class="error"></span>
@@ -275,6 +363,19 @@ export function render(main) {
                 </div>
 
                 <div class="form-group">
+                    <label for="usage-size">Feed Size (mm)</label>
+                    <input 
+                    type="number" 
+                    id="usage-size" 
+                    name="usageSize"
+                    min="0.1"
+                    step="0.1"
+                    required
+                    />
+                    <span class="error"></span>
+                </div>
+
+                <div class="form-group">
                     <label for="usage-quantity">Quantity (kg)</label>
                     <input 
                     type="number" 
@@ -289,15 +390,20 @@ export function render(main) {
                 <!-- cost should be calculated automaticaly with the privoius
                 feed stock price and the usage quantity -->
                 <div class="form-group">
-                    <label for="feed-cost">Total Cost</label>
-                    <input 
-                    type="number" 
-                    id="feed-cost" 
-                    name="feedCost" 
-                    min="0"
-                    step="0.01"
-                    required
+                    <label>Total Cost</label>
+
+                    <!-- READ-ONLY PREVIEW -->
+                    <p id="usage-cost" class="cost-preview">
+                        
+                    </p>
+
+                    <!-- HIDDEN INPUT (used only for submit) -->
+                    <input
+                        type="hidden"
+                        id="feed-cost"
+                        name="feedCost"
                     />
+
                     <span class="error"></span>
                 </div>
 
@@ -331,6 +437,7 @@ export function render(main) {
             </tbody>
             </table>
             </div>`;
+            initFeedUsagePreview();
             break;
 
         case "sales":

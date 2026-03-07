@@ -19,6 +19,18 @@ export const state = {
       }
     */
   },
+  mortality: {
+    data: []
+    /*
+      {
+        id: 1,
+        date: "2026-02-10",
+        pond: "Pond A",
+        quantity: 12,
+        reason: "Disease"
+      }
+    */
+  },
 
   feedStock: {
     totalQuantity: 0,

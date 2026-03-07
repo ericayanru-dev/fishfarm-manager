@@ -229,7 +229,7 @@ header {
     transition: 0.3s ease;
 }
 
-.menu-list .menu-item:hover {
+.menu-list .menu-item:hover, .menu-group:hover {
     color: #fff;
     background: var(--color-hover-primary);
     border-radius: 8px;
@@ -237,6 +237,15 @@ header {
 
 .collapsed .menu-list .menu-label {
     display: none;
+}
+
+.menu-sublist {
+  display: none;
+}
+
+.menu-list .menu-group .menu-sublist.open {
+  display: block;
+  background: var(--color-text-placeholder);
 }
 
 .sidebar-footer {

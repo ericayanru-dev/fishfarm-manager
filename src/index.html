@@ -38,30 +38,80 @@
                 </label>
             </form>
             <div class="menu-list">
-            <button class="menu-item" type="button" data-page="dashboard">
-                <span class="material-symbols-rounded">dashboard</span>
-                <span class="menu-label">Dashboard</span>
-            </button> 
-            <button class="menu-item" type="button" data-page="fish">
-                <span class="material-symbols-rounded">dashboard</span>
-                <span class="menu-label">Fish Stock</span>
-            </button>
-            <button class="menu-item" type="button" data-page="feed">
-                <span class="material-symbols-rounded">dashboard</span>
-                <span class="menu-label">Feed Stock</span>
-            </button>
-            <button class="menu-item" type="button" data-page="usage">
+
+                <!-- Dashboard -->
+                <button class="menu-item" type="button" data-page="dashboard">
                     <span class="material-symbols-rounded">dashboard</span>
+                    <span class="menu-label">Dashboard</span>
+                </button>
+
+                <!-- Expenses (Group Header) -->
+                <div class="menu-group ">
+
+                    <button class="menu-item menu-parent" type="button">
+                        <span class="material-symbols-rounded">payments</span>
+                        <span class="menu-label">Expenses</span>
+                    </button>
+
+                    <div class="menu-sublist">
+
+                        <!-- Capital Expenses -->
+                        <button class="menu-item submenu" type="button" data-page="capital-expenses">
+                            <span class="material-symbols-rounded">account_balance</span>
+                            <span class="menu-label">Capital Expenses</span>
+                        </button>
+
+                        <!-- Production Expenses -->
+                        <button class="menu-item submenu menu-parent" type="button">
+                            <span class="material-symbols-rounded">factory</span>
+                            <span class="menu-label">Production Expenses</span>
+                        </button>
+
+                        <div class="menu-sublist nested">
+
+                            <button class="menu-item submenu" type="button" data-page="fish">
+                                <span class="material-symbols-rounded">set_meal</span>
+                                <span class="menu-label">Fish Stock</span>
+                            </button>
+
+                            <button class="menu-item submenu" type="button" data-page="feed">
+                                <span class="material-symbols-rounded">inventory_2</span>
+                                <span class="menu-label">Feed Stock</span>
+                            </button>
+
+                            <button class="menu-item submenu" type="button" data-page="other-expenses">
+                                <span class="material-symbols-rounded">more_horiz</span>
+                                <span class="menu-label">Other</span>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mortality -->
+                <button class="menu-item" type="button" data-page="mortality">
+                    <span class="material-symbols-rounded">skull</span>
+                    <span class="menu-label">Mortality</span>
+                </button>
+
+                <!-- Feed Usage -->
+                <button class="menu-item" type="button" data-page="usage">
+                    <span class="material-symbols-rounded">analytics</span>
                     <span class="menu-label">Feed Usage</span>
-            </button>
-            <button class="menu-item" type="button" data-page="sales">
-                <span class="material-symbols-rounded">dashboard</span>
-                <span class="menu-label">Sales</span>
-            </button>
-            <button class="menu-item" type="button" data-page="reports">
-                <span class="material-symbols-rounded">dashboard</span>
-                <span class="menu-label">Reports</span>
-            </button>
+                </button>
+
+                <!-- Sales -->
+                <button class="menu-item" type="button" data-page="sales">
+                    <span class="material-symbols-rounded">point_of_sale</span>
+                    <span class="menu-label">Sales</span>
+                </button>
+
+                <!-- Reports -->
+                <button class="menu-item" type="button" data-page="reports">
+                    <span class="material-symbols-rounded">bar_chart</span>
+                    <span class="menu-label">Reports</span>
+                </button>
+
             </div>
         </nav>
         <div class="sidebar-footer">
